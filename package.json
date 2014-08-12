@@ -1,0 +1,36 @@
+{
+  "name": "licensr",
+  "version": "0.0.1",
+  "description": "License your projects with a nice CLI tool!",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "doc": "docco index.js -o .tmp/doc -l linear"
+  },
+  "bin": {
+    "licensr": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quentinrossetti/licensr.git"
+  },
+  "keywords": [
+    "license",
+    "cli"
+  ],
+  "author": "Quentin Rossetti <quentin.rossetti@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quentinrossetti/licensr/issues"
+  },
+  "homepage": "https://github.com/quentinrossetti/licensr",
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "doc": "0.0.3",
+    "mocha": "^1.21.4"
+  },
+  "dependencies": {
+    "colors": "^0.6.2",
+    "q": "^1.0.1"
+  }
+}

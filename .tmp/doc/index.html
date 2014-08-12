@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>index.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>index.js</h1>
+        
+
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> child    = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>);
+<span class="hljs-keyword">var</span> colors   = <span class="hljs-built_in">require</span>(<span class="hljs-string">'colors'</span>);
+<span class="hljs-keyword">var</span> fs       = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> path     = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+<span class="hljs-keyword">var</span> Q        = <span class="hljs-built_in">require</span>(<span class="hljs-string">'q'</span>);
+<span class="hljs-keyword">var</span> readline = <span class="hljs-built_in">require</span>(<span class="hljs-string">'readline'</span>);</pre></div>
+        
+      
+        
+        <h2 id="declarations">Declarations</h2>
+
+        
+      
+        
+        <h3 id="intro">Intro</h3>
+<p>Displays the introduction header.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> intro = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">return</span> Q.Promise(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fulfill)</span> </span>{
+    process.stdout.write(<span class="hljs-string">'Welcome to '</span>);
+    process.stdout.write(<span class="hljs-string">'Licensr'</span>.magenta);
+    process.stdout.write(<span class="hljs-string">'!\n'</span>);
+    fulfill();
+  });
+};
+<span class="hljs-keyword">var</span> run_intro = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cb)</span> </span>{
+  <span class="hljs-keyword">return</span> intro().nodeify(cb);
+};</pre></div>
+        
+      
+        
+        <h3 id="prompt">Prompt</h3>
+<p>Ask user about the license they want.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>topic</code> The data the prompt is about.</li>
+<li><code>default</code> A fallback value.</li>
+</ul>
+<p><strong>Return values</strong></p>
+<ul>
+<li><code>data</code> What the user gets.</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> prompt = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(topic, fallback)</span> </span>{
+  <span class="hljs-keyword">return</span> Q.Promise(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fulfill)</span> </span>{
+    q = <span class="hljs-string">'Choose a '</span> + topic + <span class="hljs-string">' '</span> + (<span class="hljs-string">'['</span> + fallback + <span class="hljs-string">']'</span>).cyan + <span class="hljs-string">'&gt; '</span>;
+    <span class="hljs-keyword">var</span> rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    rl.question(q, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(answer)</span> </span>{
+      rl.close();
+      <span class="hljs-keyword">if</span> (answer.trim() === <span class="hljs-string">''</span>) <span class="hljs-keyword">return</span> fulfill(fallback);
+      <span class="hljs-keyword">return</span> fulfill(answer);
+    });
+  });
+};
+<span class="hljs-keyword">var</span> run_prompt = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(topic, fallback, cb)</span> </span>{
+  <span class="hljs-keyword">return</span> prompt(topic, fallback).nodeify(cb);
+};</pre></div>
+        
+      
+        
+        <h3 id="command">Command</h3>
+<p>Run a command in the shell ans get the result.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>cmd</code> The command to run.</li>
+</ul>
+<p><strong>Return values</strong></p>
+<ul>
+<li><code>stdout</code> The result of the command.</li>
+<li><code>err</code> The error as issued by <code>child_process.exec</code>.</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> command = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cmd)</span> </span>{
+  <span class="hljs-keyword">return</span> Q.Promise(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fulfill, reject)</span> </span>{
+    child.exec(cmd, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(err, stdout)</span> </span>{
+      <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> reject(err);
+      <span class="hljs-keyword">return</span> fulfill(stdout.split(<span class="hljs-string">'\n'</span>)[<span class="hljs-number">0</span>]);
+    });
+  });
+};
+<span class="hljs-keyword">var</span> run_command = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cmd, cb)</span> </span>{
+  <span class="hljs-keyword">return</span> command(cmd).nodeify(cb);
+};</pre></div>
+        
+      
+        
+        <h2 id="runtime">Runtime</h2>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> data = {
+  name   : <span class="hljs-string">'John Doe'</span>,
+  email  : <span class="hljs-string">'john.doe@acme.com'</span>,
+  license: <span class="hljs-string">'ISC'</span>,
+  years  : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getFullYear(),
+  file   : <span class="hljs-string">'./LICENSE'</span>
+};
+run_intro()
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> run_command(<span class="hljs-string">'git config --get user.name'</span>);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(o)</span> </span>{
+    data.name = o;
+    <span class="hljs-keyword">return</span> run_command(<span class="hljs-string">'git config --get user.email'</span>);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(o)</span> </span>{
+    data.email = o;
+    <span class="hljs-keyword">return</span> run_prompt(<span class="hljs-string">'name'</span>, data.name);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(name)</span> </span>{
+    data.name = name;
+    <span class="hljs-keyword">return</span> run_prompt(<span class="hljs-string">'email'</span>, data.email);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(email)</span> </span>{
+    data.email = email;
+    <span class="hljs-keyword">return</span> run_prompt(<span class="hljs-string">'license'</span>, data.license);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(license)</span> </span>{
+    data.license = license;
+    <span class="hljs-keyword">return</span> run_prompt(<span class="hljs-string">'years'</span>, data.years);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(years)</span> </span>{
+    data.years = years;
+    <span class="hljs-keyword">return</span> run_prompt(<span class="hljs-string">'file'</span>, data.file);
+  })
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(file)</span> </span>{
+    data.file = file;
+    
+  });</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
