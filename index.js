@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 var child    = require('child_process');
-var colors   = require('colors');
 var fs       = require('fs');
 var path     = require('path');
 var Q        = require('q');
 var readline = require('readline');
-
+               require('colors');
+var api      = {};
 // ## Declarations
 
 // ### Intro
@@ -19,7 +19,7 @@ var intro = function() {
     fulfill();
   });
 };
-var run_intro = function (cb) {
+api.intro = function (cb) {
   return intro().nodeify(cb);
 };
 
@@ -41,12 +41,14 @@ var prompt = function(topic, fallback) {
     });
     rl.question(q, function (answer) {
       rl.close();
-      if (answer.trim() === '') return fulfill(fallback);
+      if (answer.trim() === '') {
+        return fulfill(fallback);
+      }
       return fulfill(answer);
     });
   });
 };
-var run_prompt = function (topic, fallback, cb) {
+api.prompt = function (topic, fallback, cb) {
   return prompt(topic, fallback).nodeify(cb);
 };
 
@@ -62,12 +64,14 @@ var run_prompt = function (topic, fallback, cb) {
 var command = function (cmd) {
   return Q.Promise(function (fulfill, reject) {
     child.exec(cmd, function (err, stdout) {
-      if (err) return reject(err);
+      if (err) {
+        return reject(err);
+      }
       return fulfill(stdout.split('\n')[0]);
     });
   });
 };
-var run_command = function (cmd, cb) {
+api.command = function (cmd, cb) {
   return command(cmd).nodeify(cb);
 };
   
@@ -90,10 +94,11 @@ var write = function (data) {
     return fulfill(txt);
   });
 };
-var run_write = function (data, cb) {
+api.write = function (data, cb) {
   return write(data).nodeify(cb);
 };
 
+module.exports = api;
 
 // ## Runtime
 var data = {
@@ -103,37 +108,37 @@ var data = {
   years  : new Date().getFullYear(),
   file   : './LICENSE'
 };
-run_intro()
+intro()
   .then(function () {
-    return run_command('git config --get user.name');
+    return command('git config --get user.name');
   })
   .then(function (o) {
     data.name = o;
-    return run_command('git config --get user.email');
+    return command('git config --get user.email');
   })
   .then(function (o) {
     data.email = o;
-    return run_prompt('name', data.name);
+    return prompt('name', data.name);
   })
   .then(function (name) {
     data.name = name;
-    return run_prompt('email', data.email);
+    return prompt('email', data.email);
   })
   .then(function (email) {
     data.email = email;
-    return run_prompt('license', data.license);
+    return prompt('license', data.license);
   })
   .then(function (license) {
     data.license = license;
-    return run_prompt('years', data.years);
+    return prompt('years', data.years);
   })
   .then(function (years) {
     data.years = years;
-    return run_prompt('file', data.file);
+    return prompt('file', data.file);
   })
   .then(function (file) {
     data.file = file;
-    return run_write(data);
+    return write(data);
   })
   .then(function (content) {
     console.log(content);
