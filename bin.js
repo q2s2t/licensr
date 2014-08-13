@@ -46,6 +46,6 @@ api.intro()
   .then(function (content) {
     console.log(content);
   })
-  .fail(function (err) {
+  .catch(function (err) {
     console.log('Error: '.red + err.message);
   });
