@@ -10,6 +10,12 @@ Usage
 
 Just run `licensr` an follow the guide!
 
+You can also use *Licensr* as a node module.
+
+```js
+var licensr = require('licensr');
+```
+
 
 Installation
 ---

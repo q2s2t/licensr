@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 var child    = require('child_process');
 var fs       = require('fs');
@@ -6,17 +5,16 @@ var path     = require('path');
 var Q        = require('q');
 var readline = require('readline');
                require('colors');
-var api      = {};
+
 // ## Declarations
+var api      = {};
 
 // ### Intro
 // Displays the introduction header.
 var intro = function() {
   return Q.Promise(function (fulfill) {
-    process.stdout.write('Welcome to ');
-    process.stdout.write('Licensr'.magenta);
-    process.stdout.write('!\n');
-    fulfill();
+    var o = 'Welcome to ' + ('Licensr'.magenta) + '!';
+    fulfill(o);
   });
 };
 api.intro = function (cb) {
@@ -99,47 +97,3 @@ api.write = function (data, cb) {
 };
 
 module.exports = api;
-
-// ## Runtime
-var data = {
-  name   : 'John Doe',
-  email  : 'johndoe@example.com',
-  license: 'ISC',
-  years  : new Date().getFullYear(),
-  file   : './LICENSE'
-};
-intro()
-  .then(function () {
-    return command('git config --get user.name');
-  })
-  .then(function (o) {
-    data.name = o;
-    return command('git config --get user.email');
-  })
-  .then(function (o) {
-    data.email = o;
-    return prompt('name', data.name);
-  })
-  .then(function (name) {
-    data.name = name;
-    return prompt('email', data.email);
-  })
-  .then(function (email) {
-    data.email = email;
-    return prompt('license', data.license);
-  })
-  .then(function (license) {
-    data.license = license;
-    return prompt('years', data.years);
-  })
-  .then(function (years) {
-    data.years = years;
-    return prompt('file', data.file);
-  })
-  .then(function (file) {
-    data.file = file;
-    return write(data);
-  })
-  .then(function (content) {
-    console.log(content);
-  });

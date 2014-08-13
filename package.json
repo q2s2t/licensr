@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "doc": "docco index.js -o .tmp/doc -l linear"
+    "doc": "docco index.js -o .tmp/doc"
   },
   "bin": {
-    "licensr": "index.js"
+    "licensr": "bin.js"
   },
   "repository": {
     "type": "git",
