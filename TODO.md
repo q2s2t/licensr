@@ -7,5 +7,5 @@
  - [x] Changelog
  - [ ] Online service (browserify?, gh-pages?)
  - [ ] Fix typo in images (Choose a email > AN email)
- - [ ] Badges everywhere!
+ - [x] Badges everywhere!
  - [ ] Feature: Add copyright to all files (js,php?,rb?,py?)
