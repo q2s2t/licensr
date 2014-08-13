@@ -1,6 +1,8 @@
 'use strict';
+var _        = require('underscore');
 var child    = require('child_process');
 var fs       = require('fs');
+var mkdirp   = require('mkdirp');
 var path     = require('path');
 var Q        = require('q');
 var readline = require('readline');
@@ -32,7 +34,7 @@ api.intro = function (cb) {
 // * `data` What the user gets.
 var prompt = function(topic, fallback) {
   return Q.Promise(function (fulfill) {
-    var q = 'Choose a ' + topic + ' ' + ('[' + fallback + ']').cyan + '> ';
+    var q = topic + ' ' + ('[' + fallback + ']').cyan + '> ';
     var rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
@@ -82,18 +84,32 @@ api.command = function (cmd, cb) {
 // __Return values__
 // * `content` Your pimped license!
 var write = function (data) {
-  return Q.Promise(function (fulfill) {
+  return Q.Promise(function (fulfill, reject) {
+    var lics = fs.readdirSync(path.resolve(__dirname, 'lic'));
+    if (!_.contains(lics, data.license.toLowerCase())) {
+      return reject(new Error('Wrong license name'));
+    }
     var read = path.resolve(__dirname, 'lic', data.license.toLowerCase());
     var txt = fs.readFileSync(read).toString();
     txt = txt.replace(/%NAME%/g, data.name);
     txt = txt.replace(/%EMAIL%/g, data.email);
     txt = txt.replace(/%YEARS%/g, data.years);
-    fs.writeFileSync(path.resolve(data.file), txt);
-    return fulfill(txt);
+    mkdirp(path.dirname(path.resolve(data.file)), function (err) {
+      if (err) {
+        return reject(err);
+      }
+      fs.writeFile(path.resolve(data.file), txt, function (err) {
+        if (err) {
+          return reject(err);
+        }
+        return fulfill(txt);
+      });
+    });
   });
 };
 api.write = function (data, cb) {
   return write(data).nodeify(cb);
 };
 
+// Expose the API
 module.exports = api;

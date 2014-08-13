@@ -10,10 +10,19 @@ Usage
 
 Just run `licensr` an follow the guide!
 
-You can also use *Licensr* as a node module.
+You can also use *Licensr* as a node module. You can use super greats 
+*Promises* or you can stick with the node's callbacks.
 
 ```js
 var licensr = require('licensr');
+licensr.command('git config --get user.name')
+  .then(function (username) {
+    // on fulfill
+    console.log(username);
+  }, function (err) {
+    // on reject
+    console.error(err);
+  });
 ```
 
 

@@ -1,5 +1,5 @@
- - [ ] Tests
- - [ ] 100% code coverage
+ - [x] Tests
+ - [x] 100% code coverage
  - [ ] Contributing (+docco)
  - [ ] More license
  - [ ] Error handling

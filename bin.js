@@ -11,7 +11,8 @@ var data = {
   file   : './LICENSE'
 };
 api.intro()
-  .then(function () {
+  .then(function (o) {
+    console.log(o);
     return api.command('git config --get user.name');
   })
   .then(function (o) {
@@ -20,23 +21,23 @@ api.intro()
   })
   .then(function (o) {
     data.email = o;
-    return api.prompt('name', data.name);
+    return api.prompt('What\'s your name?', data.name);
   })
   .then(function (name) {
     data.name = name;
-    return api.prompt('email', data.email);
+    return api.prompt('What\'s your email?', data.email);
   })
   .then(function (email) {
     data.email = email;
-    return api.prompt('license', data.license);
+    return api.prompt('Which license do you want?', data.license);
   })
   .then(function (license) {
     data.license = license;
-    return api.prompt('years', data.years);
+    return api.prompt('On which years?', data.years);
   })
   .then(function (years) {
     data.years = years;
-    return api.prompt('file', data.file);
+    return api.prompt('Where do you want your file?', data.file);
   })
   .then(function (file) {
     data.file = file;
