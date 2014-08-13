@@ -28,7 +28,7 @@
   "homepage": "https://github.com/quentinrossetti/licensr",
   "devDependencies": {
     "chai": "^1.9.1",
-    "doc": "0.0.3",
+    "docco": "^0.6.3",
     "istanbul": "^0.3.0",
     "mocha": "^1.21.4"
   },

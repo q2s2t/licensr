@@ -78,7 +78,7 @@ describe('API unit tests: write', function() {
   it('should get an error on invalid path', function (done) {
     var data = {
       license: 'ISC',
-      file   : 'D:/lic'
+      file   : (process.platform === 'win32') ? 'D:/lic' : '/'
     };
     licensr.write(data).then(null, function (err) {
       expect(err.message).to.be.a('string');

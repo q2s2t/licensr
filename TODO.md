@@ -1,10 +1,10 @@
  - [x] Tests
  - [x] 100% code coverage
- - [ ] Contributing (+docco)
+ - [x] Contributing (+docco)
  - [ ] More license
- - [ ] Error handling
- - [ ] EditorConfig
- - [ ] Changelog
+ - [x] Error handling
+ - [x] EditorConfig
+ - [x] Changelog
  - [ ] Online service (browserify?, gh-pages?)
  - [ ] Fix typo in images (Choose a email > AN email)
  - [ ] Badges everywhere!
