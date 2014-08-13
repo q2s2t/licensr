@@ -9,3 +9,4 @@
  - [ ] Fix typo in images (Choose a email > AN email)
  - [x] Badges everywhere!
  - [ ] Feature: Add copyright to all files (js,php?,rb?,py?)
+ - [ ] .npmignore

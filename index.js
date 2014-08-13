@@ -13,6 +13,9 @@ var api      = {};
 
 // ### Intro
 // Displays the introduction header.
+//
+// __Return values__
+// * `intro` The introduction text.
 var intro = function() {
   return Q.Promise(function (fulfill) {
     var o = 'Welcome to ' + ('Licensr'.magenta) + '!';
@@ -74,7 +77,7 @@ var command = function (cmd) {
 api.command = function (cmd, cb) {
   return command(cmd).nodeify(cb);
 };
-  
+
 // ### Write
 // Write the license.
 //
@@ -82,6 +85,7 @@ api.command = function (cmd, cb) {
 // * `data` The summary fo needed data.
 //
 // __Return values__
+// * `err` If there is any error.
 // * `content` Your pimped license!
 var write = function (data) {
   return Q.Promise(function (fulfill, reject) {
