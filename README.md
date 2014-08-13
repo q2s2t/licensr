@@ -50,13 +50,13 @@ npm install -g licensr
 API
 ---
 
-### Intro
+### Intro `licensr.intro`
 Displays the introduction header.
 
 __Return values__
 * `intro` The introduction text.
 
-### Prompt
+### Prompt `licensr.prompt`
 Ask user about the license they want.
 
 __Arguments__
@@ -66,7 +66,7 @@ __Arguments__
 __Return values__
 * `data` What the user gets.
 
-### Command
+### Command `licensr.command`
 Run a command in the shell and get the result.
 
 __Arguments__
@@ -76,7 +76,7 @@ __Return values__
 * `err` The error as issued by `child_process.exec`.
 * `stdout` The result of the command.
 
-### Write
+### Write `licensr.write`
 Write the license.
 
 __Arguments__
