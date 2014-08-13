@@ -53,7 +53,7 @@ api.prompt = function (topic, fallback, cb) {
 };
 
 // ### Command
-// Run a command in the shell ans get the result.
+// Run a command in the shell and get the result.
 //
 // __Arguments__
 // * `cmd` The command to run.
