@@ -19,28 +19,16 @@ describe('API unit tests: intro', function() {
 
 });
 
-describe('API unit tests: prompt', function() {
+describe('API init test: promptLicense', function() {
 
   it('should responds on user input', function (done) {
     process.stdout.write = fixture.mute;
     process.nextTick(function() {
-      process.stdin.emit('data', 'answer\n');
+      process.stdin.emit('data', '\n');
     });
-    licensr.prompt('question', 'default').then(function (answer) {
+    licensr.promptLicense().then(function (answer) {
       process.stdout.write = fixture.unmute;
-      expect(answer).to.eql('answer');
-      done();
-    });
-  });
-
-  it('should responds with default on empty user input', function (done) {
-    process.stdout.write = fixture.mute;
-    process.nextTick(function() {
-      process.stdin.emit('data', '  \n');
-    });
-    licensr.prompt('question', 'default').then(function (answer) {
-      process.stdout.write = fixture.unmute;
-      expect(answer).to.eql('default');
+      expect(answer.license).to.eql('ISC');
       done();
     });
   });

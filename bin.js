@@ -1,51 +1,67 @@
 #!/usr/bin/env node
 'use strict';
-var api = require('./index');
+require('colors');
+var api  = require('./index');
+var path = require('path');
+var _    = require('underscore');
 
-// ## Runtime
-var data = {
-  name   : 'John Doe',
-  email  : 'johndoe@example.com',
-  license: 'ISC',
-  years  : new Date().getFullYear(),
-  file   : './LICENSE'
-};
+var data = {};
+var infoDefault = {};
+
 api.intro()
-  .then(function (o) {
-    console.log(o);
-    return api.command('git config --get user.name');
+
+  .then(function (intro) {
+    console.log(intro);
+
+    // Get defaults
+    api.command('git config --get user.name')
+    .then(function (name) {
+      infoDefault.name = name;
+      return api.command('git config --get user.email');
+    })
+    .then(function (email) {
+      infoDefault.email = email;
+    })
+    .catch(function (err) {
+      infoDefault.name = null;
+      infoDefault.email = null;
+      console.error('Warning: '.yellow + 'You should install git!');
+    });
+
+    return api.promptLicense();
   })
-  .then(function (o) {
-    data.name = o;
-    return api.command('git config --get user.email');
+
+  .then(function (answer) {
+    data.license = answer.license;
+    return api.promptInfo(answer.license, infoDefault);
   })
-  .then(function (o) {
-    data.email = o;
-    return api.prompt('What\'s your name?', data.name);
-  })
-  .then(function (name) {
-    data.name = name;
-    return api.prompt('What\'s your email?', data.email);
-  })
-  .then(function (email) {
-    data.email = email;
-    return api.prompt('Which license do you want?', data.license);
-  })
-  .then(function (license) {
-    data.license = license;
-    return api.prompt('On which years?', data.years);
-  })
-  .then(function (years) {
-    data.years = years;
-    return api.prompt('Where do you want your file?', data.file);
-  })
-  .then(function (file) {
-    data.file = file;
+
+  .then(function (info) {
+    data.name        = info.name;
+    data.email       = info.email;
+    data.software    = info.software;
+    data.description = info.description;
+    data.years       = info.years;
+    data.file        = info.file;
     return api.write(data);
   })
-  .then(function (content) {
-    console.log(content);
+
+  .then(function (license) {
+    if (license.split('\n').length < 35) {
+      console.log('\n--------\n'.grey);
+      console.log(license);
+      console.log('--------\n'.grey);
+    }
+
+    var warns = [ 'LGPL-2.1' ];
+    if (_.contains(warns, data.license)) {
+      console.error('Warning: '.yellow + 'More informations are required by\
+the license. You should check them at the bottom of the file.');
+    }
+
+    console.log('License saved to: %s', path.resolve(data.file).green);
   })
+
   .catch(function (err) {
     console.log('Error: '.red + err.message);
   });
