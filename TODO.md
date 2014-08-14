@@ -5,8 +5,8 @@
  - [x] Error handling
  - [x] EditorConfig
  - [x] Changelog
- - [ ] Online service (browserify?, gh-pages?)
- - [ ] Fix typo in images (Choose a email > AN email)
+ - [ ] Feature: Online service (browserify?, gh-pages?)
+ - [x] Fix typo in images (Choose a email > AN email)
  - [x] Badges everywhere!
  - [ ] Feature: Add copyright to all files (js,php?,rb?,py?)
- - [ ] .npmignore
+ - [x] .npmignore
