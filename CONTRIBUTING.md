@@ -12,4 +12,4 @@ easy-to-follow rules.
  * Write test for your modifications (use `mocha` and `chai` modules).
  * Keep the code coverage as high as possible (100% is awesome!). Install
    `istanbul` module and run `npm run coverage` to check it.
- * Proudly add yourself to the authors in `package.json`! :+1:
+ * Proudly add yourself to the contributors in `package.json`! :+1:
